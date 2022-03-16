@@ -1,6 +1,6 @@
 import './Entete.scss';
 import Avatar from '@mui/material/Avatar';
-import avatarImg from '../images/avatar.png';
+import avatarImg from '../images/google-logo.png';
 
 export default function Entete() {
   return (
