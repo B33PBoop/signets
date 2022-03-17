@@ -8,7 +8,7 @@ import { GoogleAuthProvider } from "firebase/auth";
 export const instanceFirebase = initializeApp(firebaseConfig);
 
 //Initialiser Firebase Authentication
-export const authFirebase = getAuth();
+export const authFirebase = getAuth(instanceFirebase);
 
 //Authentification fédérée par Google
 export const authGoogle = new GoogleAuthProvider();

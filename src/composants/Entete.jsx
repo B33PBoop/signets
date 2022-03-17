@@ -1,15 +1,18 @@
 import './Entete.scss';
 import Avatar from '@mui/material/Avatar';
-import avatarImg from '../images/google-logo.png';
+import { deconnexion } from '../code/utilisateur-modele';
 
-export default function Entete() {
+export default function Entete({utilisateur}) {
   return (
     <header className="Entete">
       <div className="logo">Signets</div>
+      <nav>
       <div className="utilisateur">
-        Camille Semaan 
-        <Avatar className="avatar" alt="Camille Semaan" src={avatarImg} />
+        {utilisateur.displayName}
+        <Avatar className="avatar" alt={utilisateur.displayName} src={utilisateur.photoURL} />
       </div>
+      <div className="btn-deconnexion" onClick={deconnexion}>Déconnexion</div>
+      </nav>
     </header>
   );
 }
