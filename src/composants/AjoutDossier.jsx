@@ -13,10 +13,6 @@ export default function AjoutDossier({ouvert, setOuvert, gererAjoutDossier}) {
   const [couverture, setCouverture] = useState('');
   const [couleur, setCouleur] = useState('#000');
 
-  const gererOuvrir = () => {
-    setOuvert(true);
-  };
-
   const gererFermer = () => {
     setTitre('');
     setCouverture('');
@@ -25,11 +21,14 @@ export default function AjoutDossier({ouvert, setOuvert, gererAjoutDossier}) {
   };
 
   function gererSoumettre(){
-    //Code gérant l'ajout dans firestore
-    gererAjoutDossier(titre,couverture,couleur);
+    if(titre.search(/[a-z]{2,}/i) !== -1){
 
-    //réinitialisation et fermeture du formulaire
-    gererFermer();
+    //Code gérant l'ajout dans firestore
+      gererAjoutDossier(titre,couverture,couleur);
+
+      //réinitialisation et fermeture du formulaire
+      gererFermer();
+    }
   }
 
   return (
@@ -50,7 +49,6 @@ export default function AjoutDossier({ouvert, setOuvert, gererAjoutDossier}) {
           />
             {/*Image de couverture du dossier */}
           <TextField
-            autoFocus
             margin="dense"
             id="couverture"
             label="Image de couverture du dossier"
@@ -62,7 +60,7 @@ export default function AjoutDossier({ouvert, setOuvert, gererAjoutDossier}) {
           />
             {/*Choix de couleur*/}
         <TwitterPicker 
-            colors={["#bd3", "#000", "#2fa"]}
+            colors={["#bd3", "#000", "#2fa", "grey"]}
             width = "auto"
             triangle='hide'
             color={couleur}
