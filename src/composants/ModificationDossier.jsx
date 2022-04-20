@@ -7,24 +7,28 @@ import DialogTitle from '@mui/material/DialogTitle';
 import {TwitterPicker} from 'react-color';
 import { useState } from 'react';
 
-export default function AjoutDossier({ouvert, setOuvert, gererAjoutDossier}) {
+export default function ModificationDossier({ouvert, setOuvert, id, titre_p, couleur_p, couverture_p, modifierDossier}) {
 
-  const [titre, setTitre] = useState('');
-  const [couverture, setCouverture] = useState('');
-  const [couleur, setCouleur] = useState('#000');
+  const [titre, setTitre] = useState(titre_p);
+  const [couverture, setCouverture] = useState(couverture_p);
+  const [couleur, setCouleur] = useState(couleur_p);
 
   const gererFermer = () => {
-    setTitre('');
-    setCouverture('');
-    setCouleur('#000');
     setOuvert(false);
   };
+  
+  function gererAnnuler(){
+    setTitre(titre_p);
+    setCouverture(couverture_p);
+    setCouleur(couleur_p);
+
+    gererFermer();
+  }
 
   function gererSoumettre(){
     if(titre.search(/[a-z]{2,}/i) !== -1){
-
-    //Code gérant l'ajout dans firestore
-      gererAjoutDossier(titre,couverture,couleur);
+    //Code gérant la modification dans firestore
+      modifierDossier(id, titre, couverture, couleur);
 
       //réinitialisation et fermeture du formulaire
       gererFermer();
@@ -34,7 +38,7 @@ export default function AjoutDossier({ouvert, setOuvert, gererAjoutDossier}) {
   return (
     <div>
       <Dialog open={ouvert} onClose={gererFermer}>
-        <DialogTitle>Ajouter un Dossier</DialogTitle>
+        <DialogTitle>Modifier le Dossier</DialogTitle>
         <DialogContent>
             {/*Titre du dossier*/}
           <TextField
@@ -46,6 +50,7 @@ export default function AjoutDossier({ouvert, setOuvert, gererAjoutDossier}) {
             fullWidth
             variant="standard"
             onChange={evt => setTitre(evt.target.value)}
+            value={titre}
           />
             {/*Image de couverture du dossier */}
           <TextField
@@ -56,7 +61,7 @@ export default function AjoutDossier({ouvert, setOuvert, gererAjoutDossier}) {
             fullWidth
             variant="standard"
             onChange={evt => setCouverture(evt.target.value)}
-
+            value={couverture}
           />
             {/*Choix de couleur*/}
         <TwitterPicker 
@@ -65,11 +70,11 @@ export default function AjoutDossier({ouvert, setOuvert, gererAjoutDossier}) {
             triangle='hide'
             color={couleur}
             onChangeComplete={couleur => setCouleur(couleur.hex)}
-
+            value={couleur}
         />
         </DialogContent>
         <DialogActions>
-          <Button onClick={gererFermer}>Annuler</Button>
+          <Button onClick={gererAnnuler}>Annuler</Button>
           <Button onClick={gererSoumettre}>Soumettre</Button>
         </DialogActions>
       </Dialog>

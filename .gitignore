@@ -1,7 +1,13 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-#Ignorer le fichier de config firebase
+#Ignorer les fichiers de config firebase
 /src/code/config.js
+.firebaserc
+/firebase.json
+/firestore.indexes.json
+/firestore.rules
+/storage.rules
+/.firebase/hosting*
 
 # Ignorer .eslintcache
 .eslintcache
