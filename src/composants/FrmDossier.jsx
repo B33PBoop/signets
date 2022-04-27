@@ -7,37 +7,37 @@ import DialogTitle from '@mui/material/DialogTitle';
 import {TwitterPicker} from 'react-color';
 import { useState } from 'react';
 
-export default function ModificationDossier({ouvert, setOuvert, id, titre_p, couleur_p, couverture_p, modifierDossier}) {
+export default function FrmDossier({ouvert, setOuvert, id=null, titre_p='', couleur_p='', couverture_p='', gererActionDossier}) {
 
   const [titre, setTitre] = useState(titre_p);
   const [couverture, setCouverture] = useState(couverture_p);
   const [couleur, setCouleur] = useState(couleur_p);
-
-  const gererFermer = () => {
-    setOuvert(false);
-  };
   
-  function gererAnnuler(){
+  function viderEtFermerFrm(){
     setTitre(titre_p);
     setCouverture(couverture_p);
     setCouleur(couleur_p);
 
-    gererFermer();
+    setOuvert(false);
   }
 
   function gererSoumettre(){
-    if(titre.search(/[a-z]{2,}/i) !== -1){
+    if(titre.search(/[a-z]+/i) !== -1){
     //Code gérant la modification dans firestore
-      modifierDossier(id, titre, couverture, couleur);
+      gererActionDossier(id, titre, couverture, couleur);
 
-      //réinitialisation et fermeture du formulaire
-      gererFermer();
+      //Appeler cette fonction uniquement lors de l'ajout d,un nouveau dossier
+      if(id == null){
+      viderEtFermerFrm();
+      } else {
+        setOuvert(false);
+      }
     }
   }
 
   return (
     <div>
-      <Dialog open={ouvert} onClose={gererFermer}>
+      <Dialog open={ouvert} onClose={viderEtFermerFrm}>
         <DialogTitle>Modifier le Dossier</DialogTitle>
         <DialogContent>
             {/*Titre du dossier*/}
@@ -74,7 +74,7 @@ export default function ModificationDossier({ouvert, setOuvert, id, titre_p, cou
         />
         </DialogContent>
         <DialogActions>
-          <Button onClick={gererAnnuler}>Annuler</Button>
+          <Button onClick={viderEtFermerFrm}>Annuler</Button>
           <Button onClick={gererSoumettre}>Soumettre</Button>
         </DialogActions>
       </Dialog>
