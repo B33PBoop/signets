@@ -8,8 +8,12 @@ import MenuItem from '@mui/material/MenuItem';
 import couvertureDefaut from '../images/couverture-defaut.png';
 import { formaterDateFR } from '../code/helper';
 import FrmDossier from './FrmDossier';
+import * as signetModele from '../code/signet-modele';
 
-export default function Dossier({id, titre, couleur, dateModif, couverture, supprimerDossier ,modifierDossier}) {
+export default function Dossier({id, titre, couleur, dateModif, couverture, supprimerDossier ,modifierDossier, uid, top3}) {
+  //état des signets dans ce dossier
+  const [signets ,setSignets] = useState(top3 || []);
+
   //état du menu contextuel
   const [eltAncrage, setEltAncrage] = useState(null);
   const ouvertMenu = Boolean(eltAncrage);
@@ -41,6 +45,7 @@ export default function Dossier({id, titre, couleur, dateModif, couverture, supp
     gererFermerMenu();
   }
 
+  //[TODO : déplacer cette fonction dans le formulaire et l'améliorer]
   //tester si l'URL dans la variable couverture est valide
   let urlCouverture; 
   try {
@@ -49,14 +54,47 @@ export default function Dossier({id, titre, couleur, dateModif, couverture, supp
     couverture = couvertureDefaut;
   }
 
+  //état dropzone
+  const [dropzone, setDropzone] = useState(false);
+
+  function gererDragEnter(event){
+    event.preventDefault();
+    setDropzone(true);
+  }
+
+  function gererDragOver(event){
+    event.preventDefault();
+  }
+
+  function gererDrop(event){
+    event.preventDefault();
+    setDropzone(false);
+    let url = event.dataTransfer.getData("URL");
+    //on voudrait aussi aller chercher le title(à implémenter plus tard)
+
+    //on appelle la méthode d'ajout d'un signet dans un dossier défini dans le composant parent
+    //elle prend l'id du dossier et l'url déposée
+    ajouterSignet(id, url);
+  }
+
+  function gererDragLeave(event){
+    event.preventDefault();
+    setDropzone(false);
+  }
+
+  function ajouterSignet(idDossier, url){
+    const derniers3 = [...signets, {adresse: url, titre:'placeholder'}].slice(-3);
+    signetModele.creer(uid, idDossier, derniers3).then(
+      () => setSignets(derniers3)
+    );
+  }
+
   return (
-    // Remarquez l'objet JS donné à la valeur de l'attribut style en JSX, voir : 
-    // https://reactjs.org/docs/dom-elements.html#style
-    <article className="Dossier" style={{backgroundColor: couleur}}>
-      <div className="couverture">
-        <IconButton className="deplacer" aria-label="déplacer" disableRipple={true}>
+    <article onDrop={gererDrop} onDragEnter={gererDragEnter} onDragOver={gererDragOver} onDragLeave={gererDragLeave} className={"Dossier " + (dropzone ? 'dropzone' : '')} style={{backgroundColor: couleur}}>
+      <IconButton className="deplacer" aria-label="déplacer" disableRipple={true}>
           <SortIcon />
         </IconButton>
+      <div className="couverture">
         <img src={couverture || couvertureDefaut} alt={titre}/>
       </div>
       <div className="info">
