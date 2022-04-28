@@ -9,8 +9,12 @@ import couvertureDefaut from '../images/couverture-defaut.png';
 import { formaterDateFR } from '../code/helper';
 import FrmDossier from './FrmDossier';
 import * as signetModele from '../code/signet-modele';
+import { UtilisateurContext } from './Appli';
+import { useContext } from 'react';
 
-export default function Dossier({id, titre, couleur, dateModif, couverture, supprimerDossier ,modifierDossier, uid, top3}) {
+export default function Dossier({id, titre, couleur, dateModif, couverture, supprimerDossier ,modifierDossier, top3}) {
+  const utilisateur = useContext(UtilisateurContext);
+
   //état des signets dans ce dossier
   const [signets ,setSignets] = useState(top3 || []);
 
@@ -59,6 +63,7 @@ export default function Dossier({id, titre, couleur, dateModif, couverture, supp
 
   function gererDragEnter(event){
     event.preventDefault();
+    event.dataTransfer.effectAllowed('link');
     setDropzone(true);
   }
 
@@ -78,13 +83,12 @@ export default function Dossier({id, titre, couleur, dateModif, couverture, supp
   }
 
   function gererDragLeave(event){
-    event.preventDefault();
     setDropzone(false);
   }
 
   function ajouterSignet(idDossier, url){
     const derniers3 = [...signets, {adresse: url, titre:'placeholder'}].slice(-3);
-    signetModele.creer(uid, idDossier, derniers3).then(
+    signetModele.creer(utilisateur.uid, idDossier, derniers3).then(
       () => setSignets(derniers3)
     );
   }

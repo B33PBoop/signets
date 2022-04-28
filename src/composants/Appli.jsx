@@ -12,9 +12,12 @@ import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 
 //Fonctionalités requises
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext, createContext } from 'react';
 import { observerEtatConnexion } from '../code/utilisateur-modele';
 import * as dossierModele from '../code/dossier-modele';
+
+//Créer une variable de contexte (globale) accessible dans tout les composants
+export const UtilisateurContext = createContext(null);
 
 export default function Appli() {
   //État utilisateur
@@ -43,17 +46,19 @@ export default function Appli() {
 
   return (
       utilisateur ?
+      <UtilisateurContext.Provider value={utilisateur}>
         <div className="Appli">
-        <Entete utilisateur={utilisateur} />
-        <section className="contenu-principal">
-          <ListeDossiers utilisateur={utilisateur} dossiers={dossiers} setDossiers={setDossiers} />
-          {/*Ajouter un composant FormDialog  de MUI*/}
-          <FrmDossier ouvert={ouvert} setOuvert={setOuvert} gererActionDossier={ajouterDossier} />
-          <Fab onClick={()=>setOuvert(true)} size="large" className="ajoutRessource" color="primary" aria-label="Ajouter dossier">
-            <AddIcon />
-          </Fab>
-        </section>
-      </div>
+          <Entete />
+          <section className="contenu-principal">
+            <ListeDossiers dossiers={dossiers} setDossiers={setDossiers} />
+            {/*Ajouter un composant FormDialog  de MUI*/}
+            <FrmDossier ouvert={ouvert} setOuvert={setOuvert} gererActionDossier={ajouterDossier} />
+            <Fab onClick={()=>setOuvert(true)} size="large" className="ajoutRessource" color="primary" aria-label="Ajouter dossier">
+              <AddIcon />
+            </Fab>
+          </section>
+        </div>
+      </UtilisateurContext.Provider>
     :
     <Accueil />
   );

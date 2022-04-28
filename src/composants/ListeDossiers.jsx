@@ -2,8 +2,11 @@ import './ListeDossiers.scss';
 import Dossier from './Dossier';
 import { useEffect } from 'react';
 import * as dossierModele from '../code/dossier-modele';
+import { UtilisateurContext } from './Appli';
+import { useContext } from 'react';
 
-export default function ListeDossiers({utilisateur, dossiers, setDossiers}) {
+export default function ListeDossiers({dossiers, setDossiers}) {
+  const utilisateur = useContext(UtilisateurContext);
 
   //Lire les dossiers (de l'utilisateur connecté) dans Firestore
   useEffect(
