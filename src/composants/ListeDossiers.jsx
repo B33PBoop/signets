@@ -52,7 +52,7 @@ export default function ListeDossiers({dossiers, setDossiers}) {
           // Remarquez l'utilisation du "spread operator" pour "étaler" les 
           // propriétés de l'objet 'dossier' reçu en paramètre de la fonction
           // fléchée dans les props du composant 'Dossier' !!
-          dossier =>  <li key={dossier.id}><Dossier {...dossier} supprimerDossier={supprimerDossier} modifierDossier={modifierDossier} uid={utilisateur.uid} /></li>
+          dossier =>  <li key={dossier.id} ><Dossier {...dossier} supprimerDossier={supprimerDossier} modifierDossier={modifierDossier} uid={utilisateur.uid} /></li>
         )
       }
     </ul>

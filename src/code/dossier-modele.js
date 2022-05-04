@@ -8,7 +8,7 @@ import { getDocs, getDoc, collection, addDoc, Timestamp, doc, deleteDoc, query, 
  */
 export async function lireTout(idUtilisateur){
     return getDocs(query(collection(bdFirestore, 'signets', idUtilisateur, 'dossiers'),
-    orderBy('dateModif', 'desc'))).then(
+    orderBy('dateModif', 'desc'), orderBy('titre', 'asc'))).then(
         resultat => resultat.docs.map(doc => ({id: doc.id, ...doc.data()}))
     );
 }
